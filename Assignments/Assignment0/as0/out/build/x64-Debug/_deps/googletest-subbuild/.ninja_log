@@ -1,0 +1,21 @@
+# ninja log v5
+2	193	7460245740723262	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	d923c4f7f46e3deb
+2	193	7460245740723262	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	d923c4f7f46e3deb
+194	1778	7460245756539748	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	8161a088992b7493
+194	1778	7460245756539748	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	8161a088992b7493
+1779	1958	7460245758361174	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b0977dad47fbee12
+1779	1958	7460245758361174	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b0977dad47fbee12
+1960	2126	7460245760022405	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	1d41de6f1e5cfc4f
+1960	2126	7460245760022405	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	1d41de6f1e5cfc4f
+2127	2293	7460245761732186	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	1aca548e2144342f
+2127	2293	7460245761732186	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	1aca548e2144342f
+2294	2451	7460245763307270	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	31bd332713ff8917
+2294	2451	7460245763307270	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	31bd332713ff8917
+2452	2614	7460245764933808	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	c25d0d5474d09331
+2452	2614	7460245764933808	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	c25d0d5474d09331
+2614	2760	7460245766394464	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	9263e458aeb0372d
+2614	2760	7460245766394464	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	9263e458aeb0372d
+2760	2984	7460245768624965	CMakeFiles/googletest-populate-complete	8c3cd3a33443bd3b
+2760	2984	7460245768624965	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	8c3cd3a33443bd3b
+2760	2984	7460245768624965	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	8c3cd3a33443bd3b
+2760	2984	7460245768624965	D:/CS2040C/Assignments/Assignment0/as0/out/build/x64-Debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	8c3cd3a33443bd3b

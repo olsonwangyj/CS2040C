@@ -1,0 +1,12 @@
+# ninja log v5
+6	405	7460245948749344	CMakeFiles/RGB.dir/RGB.cpp.obj	42f2fdd900d7d15c
+407	533	7460245950003289	RGB.lib	5f43592f7305d44a
+24	694	7460245951578842	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj	aca846bf7af63a73
+12	705	7460245951734912	CMakeFiles/RGB_test.dir/RGB_test.cpp.obj	5b12bf9cbf958016
+17	1680	7460245961313624	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj	3ce3eee300072133
+1680	1793	7460245962415255	lib/gtest.lib	4330e63376bdea3c
+1793	1882	7460245963356956	lib/gtest_main.lib	695d4efd26e52731
+1883	2524	7460245969475881	RGB_test.exe	735fbda2f4df94a0
+19	654	7460356545674253	CMakeFiles/RGB.dir/RGB.cpp.obj	42f2fdd900d7d15c
+656	713	7460356546258701	RGB.lib	5f43592f7305d44a
+713	960	7460356548279657	RGB_test.exe	735fbda2f4df94a0
