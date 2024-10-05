@@ -164,6 +164,80 @@ template <typename T> void Tree<T>::insert(T element) {
   // TODO: Implement this method
 }
 
+template <typename T> void helperInsert(T element, Node<T>* root) {
+    if (!root) {
+        root = new Node<T>(element);
+    } else if (element < root->element) {
+        helperInsert(element, root->left);
+    } else if (element > root->element) {
+        helperInsert(element, root->right);
+    }
+    
+    updateHeight(root);
+    
+    while (checkBalance(root)) {
+        Node<T>* cur = checkBalance(root);
+        if (!cur->left || cur->left->height < cur->right->height) {
+            Node<T>* tmp = cur->right;
+            if (checkBalance(tmp) && (!tmp->right || tmp->right->height < tmp->left->height)) {
+                rightRotate(tmp);
+                leftRotate(cur);
+            } else {
+                leftRotate(cur);
+            }
+        } else if (!cur->right || cur->right->height < cur->left->height) {
+            Node<T>* tmp = cur->left;
+            if (checkBalance(tmp) && (!tmp->left || tmp->left->height < tmp->right->height)) {
+                leftRotate(tmp);
+                rightRotate(cur);
+            } else {
+                rightRotate(cur);
+            }
+        }
+    }
+}
+
+template <typename T> int updateHeight(Node<T>* root) {
+    if (!root) return -1;
+    root->height = max(updateHeight(root->left), updateHeight(root->right)) + 1;
+    
+    return root->height;
+}
+
+template <typename T> Node<T>* checkBalance(Node<T>* root) {
+    if (!root) return NULL;
+    
+    int leftHeight = root->left ? root->left->height : -1;
+    int rightHeight = root->right ? root->right->height : -1;
+    if (abs(leftHeight - rightHeight) > 1) return root;
+    
+    Node<T>* left = checkBalance(root->left);
+    if (left) return left;
+    
+    Node<T>* right = checkBalance(root->right);
+    if (right) return right;
+    
+    return NULL;
+}
+
+template <typename T> void leftRotate(Node<T>*& root) {
+    Node<T>* newRoot = root->right;
+    root->right = newRoot->left;
+    newRoot->left = root;
+    root = newRoot;
+    updateHeight(root->left);
+    updateHeight(root);
+}
+
+template <typename T> void rightRotate(Node<T>*& root) {
+    Node<T>* newRoot = root->left;
+    root->left = newRoot->right;
+    newRoot->right = root;
+    root = newRoot;
+    updateHeight(root->right);
+    updateHeight(root);
+}
+
 // Checks whether the container contains the specified element
 template <typename T> bool Tree<T>::contains(T element) const {
   // TODO: Implement this method
