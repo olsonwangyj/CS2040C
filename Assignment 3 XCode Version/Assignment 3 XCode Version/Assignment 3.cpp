@@ -47,8 +47,8 @@ void testSuccessor() {
     tree.insert(10);
     tree.insert(30);
     tree.insert(25);
-    std::cout << "Successor of 10: " << tree.successor(10) << std::endl;  // 应该是 20
-    std::cout << "Successor of 25: " << tree.successor(25) << std::endl;  // 应该是 30
+    std::cout << "Successor of 10: " << tree.successor(10) << std::endl;
+    std::cout << "Successor of 25: " << tree.successor(25) << std::endl;
 }
 
 void testTraversalOrders() {

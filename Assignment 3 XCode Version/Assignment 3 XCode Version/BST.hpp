@@ -112,7 +112,19 @@ private:
     return res;
   }
 
-  // Feel free to declare helper functions here, if necessary
+    // Feel free to declare helper functions here, if necessary
+    void deleteTree(Node<T>* root);
+    Node<T>* helperInsert(T element, Node<T>* root);
+    int updateHeight(Node<T>* root);
+    Node<T>* checkBalance(Node<T>* root);
+    Node<T>* leftRotate(Node<T>* root);
+    Node<T>* rightRotate(Node<T>* root);
+    bool helperContains(T element, Node<T>* root) const;
+    Node<T>* helperSuccessor(T element, Node<T>* root);
+    Node<T>* parent(Node<T>* root, T element);
+    string _pre_order(Node<T> *node);
+    string _in_order(Node<T> *node);
+    string _post_order(Node<T> *node);
   };
 
 // Constructor
@@ -127,7 +139,7 @@ template <typename T> Tree<T>::~Tree() {
   // TODO: Implement this method
 }
 
-template <typename T> void deleteTree(Node<T>* root) {
+template <typename T> void Tree<T>::deleteTree(Node<T>* root) {
     if (root == NULL) return;
     
     deleteTree(root->left);
@@ -167,13 +179,15 @@ template <typename T> void Tree<T>::insert(T element) {
     m_size++;
 }
 
-template <typename T> Node<T>* helperInsert(T element, Node<T>* root) {
+template <typename T> Node<T>* Tree<T>::helperInsert(T element, Node<T>* root) {
     if (!root) {
         return new Node<T>(element);
     } else if (element < root->element) {
         root->left = helperInsert(element, root->left);
     } else if (element > root->element) {
         root->right = helperInsert(element, root->right);
+    } else {
+        return root;
     }
     
     updateHeight(root);
@@ -202,14 +216,14 @@ template <typename T> Node<T>* helperInsert(T element, Node<T>* root) {
     return root;
 }
 
-template <typename T> int updateHeight(Node<T>* root) {
+template <typename T> int Tree<T>::updateHeight(Node<T>* root) {
     if (!root) return -1;
     root->height = std::max(updateHeight(root->left), updateHeight(root->right)) + 1;
     
     return root->height;
 }
 
-template <typename T> Node<T>* checkBalance(Node<T>* root) {
+template <typename T> Node<T>* Tree<T>::checkBalance(Node<T>* root) {
     if (!root) return NULL;
     
     int leftHeight = root->left ? root->left->height : -1;
@@ -225,7 +239,7 @@ template <typename T> Node<T>* checkBalance(Node<T>* root) {
     return NULL;
 }
 
-template <typename T> Node<T>* leftRotate(Node<T>* root) {
+template <typename T> Node<T>* Tree<T>::leftRotate(Node<T>* root) {
     Node<T>* newRoot = root->right;
     root->right = newRoot->left;
     newRoot->left = root;
@@ -236,7 +250,7 @@ template <typename T> Node<T>* leftRotate(Node<T>* root) {
     return newRoot;
 }
 
-template <typename T> Node<T>* rightRotate(Node<T>* root) {
+template <typename T> Node<T>* Tree<T>::rightRotate(Node<T>* root) {
     Node<T>* newRoot = root->left;
     root->left = newRoot->right;
     newRoot->right = root;
@@ -250,10 +264,11 @@ template <typename T> Node<T>* rightRotate(Node<T>* root) {
 // Checks whether the container contains the specified element
 template <typename T> bool Tree<T>::contains(T element) const {
   // TODO: Implement this method
+    if (!m_root) throw std::runtime_error("Tree is empty");
     return helperContains(element, m_root);
 }
 
-template <typename T> bool helperContains(T element, Node<T>* root) {
+template <typename T> bool Tree<T>::helperContains(T element, Node<T>* root) const {
     if (!root) return false;
     if (element == root->element) return true;
     if (element > root->element) return helperContains(element, root->right);
@@ -264,7 +279,7 @@ template <typename T> bool helperContains(T element, Node<T>* root) {
 
 // Returns the maximum element
 template <typename T> T Tree<T>::max() const {
-    if (!m_root) return NULL;
+    if (!m_root) throw std::runtime_error("Tree is empty");
     
     Node<T>* cur = m_root;
     while (cur->right != NULL) cur = cur->right;
@@ -275,7 +290,7 @@ template <typename T> T Tree<T>::max() const {
 
 // Returns the minimum element
 template <typename T> T Tree<T>::min() const {
-    if (!m_root) return NULL;
+    if (!m_root) throw std::runtime_error("Tree is empty");
     
     Node<T>* cur = m_root;
     while (cur->left != NULL) cur = cur->left;
@@ -289,14 +304,20 @@ template <typename T> T Tree<T>::successor(T element) {
   // TODO: Implement this method
     if (!contains(element)) throw std::runtime_error("not contains");
     Node<T>* cur = helperSuccessor(element, m_root);
-    if (!cur->right) return parent(m_root, element)->element;
-    cur = cur->right;
-    while (cur->left) cur = cur->left;
+    if (!cur) throw std::runtime_error("not contains");
     
-    return cur->element;
+    if (cur->right) {
+            cur = cur->right;
+            while (cur->left) cur = cur->left;
+            return cur->element;
+    }
+
+    Node<T>* tmp = parent(m_root, element);
+    if (!tmp) throw std::runtime_error("not contains");
+    return tmp->element;
 }
 
-template <typename T> Node<T>* parent(Node<T>* root, T element) {
+template <typename T> Node<T>* Tree<T>::parent(Node<T>* root, T element) {
     if (!root) return NULL;
     
     Node<T>* pre = NULL;
@@ -307,16 +328,14 @@ template <typename T> Node<T>* parent(Node<T>* root, T element) {
             pre = cur;
             cur = cur->left;
         } else {
-            pre = cur;
             cur = cur->right;
         }
     }
     
-    if (!pre) throw std::runtime_error("not contains");
     return pre;
 }
 
-template <typename T> Node<T>* helperSuccessor(T element, Node<T>* root) {
+template <typename T> Node<T>* Tree<T>::helperSuccessor(T element, Node<T>* root) {
     if (!root) return NULL;
     if (element == root->element) return root;
     if (element > root->element) return helperSuccessor(element, root->right);
@@ -326,7 +345,7 @@ template <typename T> Node<T>* helperSuccessor(T element, Node<T>* root) {
 }
 
 template <typename T>
-string _pre_order(Node<T> *node) {
+string Tree<T>::_pre_order(Node<T> *node) {
   return my_to_string(node->element)
     + (node->left == nullptr ? "" : " " + _pre_order(node->left))
     + (node->right == nullptr ? "" : " " + _pre_order(node->right));
@@ -341,10 +360,10 @@ string Tree<T>::pre_order() {
 }
 
 template <typename T>
-string _in_order(Node<T> *node) {
-  return (node->left == nullptr ? "" :_pre_order(node->left))
+string Tree<T>::_in_order(Node<T> *node) {
+  return (node->left == nullptr ? "" :_in_order(node->left))
     + " " + my_to_string(node->element)
-    + (node->right == nullptr ? "" : " " + _pre_order(node->right));
+    + (node->right == nullptr ? "" : " " + _in_order(node->right));
 }
 
 template <typename T>
@@ -357,9 +376,9 @@ string Tree<T>::in_order() {
 }
 
 template <typename T>
-string _post_order(Node<T> *node) {
-  return (node->left == nullptr ? "" :_pre_order(node->left))
-    + (node->right == nullptr ? "" : " " + _pre_order(node->right))
+string Tree<T>::_post_order(Node<T> *node) {
+  return (node->left == nullptr ? "" :_post_order(node->left))
+    + (node->right == nullptr ? "" : " " + _post_order(node->right))
     + " " + my_to_string(node->element);
 }
 
