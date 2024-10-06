@@ -33,7 +33,7 @@ template <typename T> struct Node {
 
 template <typename T> class Tree {
 private:
-  size_t m_size;
+  size_t m_size = 0;
   Node<T> *m_root;
 
 public:
@@ -156,50 +156,55 @@ template <typename T> size_t Tree<T>::size() const {
 // Returns the height of the tree
 template <typename T> int Tree<T>::height() const {
   // TODO: Implement this method
+    if (!m_root) return 0;
     return m_root->height;
 }
 
 // Inserts an element
 template <typename T> void Tree<T>::insert(T element) {
   // TODO: Implement this method
+    m_root = helperInsert(element, m_root);
+    m_size++;
 }
 
-template <typename T> void helperInsert(T element, Node<T>* root) {
+template <typename T> Node<T>* helperInsert(T element, Node<T>* root) {
     if (!root) {
-        root = new Node<T>(element);
+        return new Node<T>(element);
     } else if (element < root->element) {
-        helperInsert(element, root->left);
+        root->left = helperInsert(element, root->left);
     } else if (element > root->element) {
-        helperInsert(element, root->right);
+        root->right = helperInsert(element, root->right);
     }
     
     updateHeight(root);
     
-    while (checkBalance(root)) {
-        Node<T>* cur = checkBalance(root);
+    Node<T>* cur = checkBalance(root);
+    if (cur) {
         if (!cur->left || cur->left->height < cur->right->height) {
             Node<T>* tmp = cur->right;
             if (checkBalance(tmp) && (!tmp->right || tmp->right->height < tmp->left->height)) {
-                rightRotate(tmp);
-                leftRotate(cur);
+                tmp = rightRotate(tmp);
+                return leftRotate(cur);
             } else {
-                leftRotate(cur);
+                return leftRotate(cur);
             }
         } else if (!cur->right || cur->right->height < cur->left->height) {
             Node<T>* tmp = cur->left;
             if (checkBalance(tmp) && (!tmp->left || tmp->left->height < tmp->right->height)) {
-                leftRotate(tmp);
-                rightRotate(cur);
+                tmp = leftRotate(tmp);
+                return rightRotate(cur);
             } else {
-                rightRotate(cur);
+                return rightRotate(cur);
             }
         }
     }
+    
+    return root;
 }
 
 template <typename T> int updateHeight(Node<T>* root) {
     if (!root) return -1;
-    root->height = max(updateHeight(root->left), updateHeight(root->right)) + 1;
+    root->height = std::max(updateHeight(root->left), updateHeight(root->right)) + 1;
     
     return root->height;
 }
@@ -220,22 +225,26 @@ template <typename T> Node<T>* checkBalance(Node<T>* root) {
     return NULL;
 }
 
-template <typename T> void leftRotate(Node<T>*& root) {
+template <typename T> Node<T>* leftRotate(Node<T>* root) {
     Node<T>* newRoot = root->right;
     root->right = newRoot->left;
     newRoot->left = root;
-    root = newRoot;
-    updateHeight(root->left);
+
     updateHeight(root);
+    updateHeight(newRoot);
+    
+    return newRoot;
 }
 
-template <typename T> void rightRotate(Node<T>*& root) {
+template <typename T> Node<T>* rightRotate(Node<T>* root) {
     Node<T>* newRoot = root->left;
     root->left = newRoot->right;
     newRoot->right = root;
-    root = newRoot;
-    updateHeight(root->right);
+
     updateHeight(root);
+    updateHeight(newRoot);
+    
+    return newRoot;
 }
 
 // Checks whether the container contains the specified element
@@ -280,11 +289,31 @@ template <typename T> T Tree<T>::successor(T element) {
   // TODO: Implement this method
     if (!contains(element)) throw std::runtime_error("not contains");
     Node<T>* cur = helperSuccessor(element, m_root);
-    if (!cur->right) return NULL;
+    if (!cur->right) return parent(m_root, element)->element;
     cur = cur->right;
-    while (!cur->left) cur = cur->left;
+    while (cur->left) cur = cur->left;
     
     return cur->element;
+}
+
+template <typename T> Node<T>* parent(Node<T>* root, T element) {
+    if (!root) return NULL;
+    
+    Node<T>* pre = NULL;
+    Node<T>* cur = root;
+    
+    while (cur->element != element) {
+        if (element < cur->element) {
+            pre = cur;
+            cur = cur->left;
+        } else {
+            pre = cur;
+            cur = cur->right;
+        }
+    }
+    
+    if (!pre) throw std::runtime_error("not contains");
+    return pre;
 }
 
 template <typename T> Node<T>* helperSuccessor(T element, Node<T>* root) {
@@ -313,8 +342,8 @@ string Tree<T>::pre_order() {
 
 template <typename T>
 string _in_order(Node<T> *node) {
-  return (node->left == nullptr ? "" : " " + _pre_order(node->left))
-    + my_to_string(node->element)
+  return (node->left == nullptr ? "" :_pre_order(node->left))
+    + " " + my_to_string(node->element)
     + (node->right == nullptr ? "" : " " + _pre_order(node->right));
 }
 
@@ -329,9 +358,9 @@ string Tree<T>::in_order() {
 
 template <typename T>
 string _post_order(Node<T> *node) {
-  return (node->left == nullptr ? "" : " " + _pre_order(node->left))
+  return (node->left == nullptr ? "" :_pre_order(node->left))
     + (node->right == nullptr ? "" : " " + _pre_order(node->right))
-    + my_to_string(node->element);
+    + " " + my_to_string(node->element);
 }
 
 template <typename T>
