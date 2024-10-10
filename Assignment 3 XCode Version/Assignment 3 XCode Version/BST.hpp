@@ -213,27 +213,6 @@ template <typename T> Node<T>* Tree<T>::helperInsert(T element, Node<T>* root) {
         }
     }
     
-    /*Node<T>* cur = checkBalance(root);
-    if (cur) {
-        if (!cur->left || cur->left->height < cur->right->height) {
-            Node<T>* tmp = cur->right;
-            if (checkBalance(tmp) && (!tmp->right || tmp->right->height < tmp->left->height)) {
-                tmp = rightRotate(tmp);
-                return leftRotate(cur);
-            } else {
-                return leftRotate(cur);
-            }
-        } else if (!cur->right || cur->right->height < cur->left->height) {
-            Node<T>* tmp = cur->left;
-            if (checkBalance(tmp) && (!tmp->left || tmp->left->height < tmp->right->height)) {
-                tmp = leftRotate(tmp);
-                return rightRotate(cur);
-            } else {
-                return rightRotate(cur);
-            }
-        }
-    }*/
-    
     return root;
 }
 
@@ -248,22 +227,6 @@ template <typename T> int Tree<T>::getHeight(Node<T>* root) {
     if (!root) return -1;
     return root->height;
 }
-
-/*template <typename T> Node<T>* Tree<T>::checkBalance(Node<T>* root) {
-    if (!root) return NULL;
-    
-    int leftHeight = root->left ? root->left->height : -1;
-    int rightHeight = root->right ? root->right->height : -1;
-    if (abs(leftHeight - rightHeight) > 1) return root;
-    
-    Node<T>* left = checkBalance(root->left);
-    if (left) return left;
-    
-    Node<T>* right = checkBalance(root->right);
-    if (right) return right;
-    
-    return NULL;
-}*/
 
 template <typename T> int Tree<T>::getBalance(Node<T>* root) {
     if (!root) return 0;
@@ -310,7 +273,7 @@ template <typename T> bool Tree<T>::helperContains(T element, Node<T>* root) con
 
 // Returns the maximum element
 template <typename T> T Tree<T>::max() const {
-    if (!m_root) throw std::runtime_error("Tree is empty");
+    if (!m_root) throw std::out_of_range("Tree is empty");
     
     Node<T>* cur = m_root;
     while (cur->right != NULL) cur = cur->right;
@@ -333,41 +296,27 @@ template <typename T> T Tree<T>::min() const {
 // Returns the successor of the specified element
 template <typename T> T Tree<T>::successor(T element) {
   // TODO: Implement this method
-    if (!contains(element)) throw std::runtime_error("not contains");
-    Node<T>* cur = helperSuccessor(element, m_root);
-    if (!cur) throw std::out_of_range("not contains");
-    
-    if (cur->right) {
-            cur = cur->right;
-            while (cur->left) cur = cur->left;
-            return cur->element;
-    }
+    Node<T>* successor = nullptr;
+    Node<T>* cur = m_root;
 
-    Node<T>* tmp = parent(m_root, element);
-    if (!tmp) throw std::out_of_range("not contains");
-    return tmp->element;
-}
-
-template <typename T> Node<T>* Tree<T>::parent(Node<T>* root, T element) {
-    if (!root) return NULL;
-    
-    Node<T>* pre = NULL;
-    Node<T>* cur = root;
-    
-    while (cur->element != element) {
+    while (cur) {
         if (element < cur->element) {
-            pre = cur;
+            successor = cur;
             cur = cur->left;
         } else {
             cur = cur->right;
         }
     }
-    
-    return pre;
+
+    if (successor) {
+        return successor->element;
+    } else {
+        throw std::out_of_range("no larger value found");
+    }
 }
 
 template <typename T> Node<T>* Tree<T>::helperSuccessor(T element, Node<T>* root) {
-    if (!root) return NULL;
+    if (!root) return nullptr;
     if (element == root->element) return root;
     if (element > root->element) return helperSuccessor(element, root->right);
     if (element < root->element) return helperSuccessor(element, root->left);
